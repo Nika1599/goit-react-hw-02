@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+
+import Description from "../Description/Description";
 import Options from "../Options/Options";
 import Feedback from "../Feedback/Feedback";
 import Notification from "../Notification/Notification";
-import Statistics from "../Statistics/Statistics";
 
 const App = () => {
   const [feedback, setFeedback] = useState(() => {
@@ -22,9 +23,9 @@ const App = () => {
   }, [feedback]);
 
   const updateFeedback = (feedbackType) => {
-    setFeedback((initialFeedback) => ({
-      ...initialFeedback,
-      [feedbackType]: initialFeedback[feedbackType] + 1,
+    setFeedback((prev) => ({
+      ...prev,
+      [feedbackType]: prev[feedbackType] + 1,
     }));
   };
 
@@ -38,35 +39,18 @@ const App = () => {
 
   return (
     <>
-      <h1>Sip Happens Café</h1>
-      <p>
-        Please leave your feedback about our service by selecting one of the
-        options below.
-      </p>
+      <Description />
       <Options
         updateFeedback={updateFeedback}
         resetFeedback={resetFeedback}
         totalFeedback={totalFeedback}
       />
       {totalFeedback > 0 ? (
-        <>
-          <Feedback
-            name="Good"
-            number={feedback.good}
-            positiveFeedback={positiveFeedback}
-          />
-          <Feedback
-            name="Neutral"
-            number={feedback.neutral}
-            positiveFeedback={positiveFeedback}
-          />
-          <Feedback
-            name="Bad"
-            number={feedback.bad}
-            positiveFeedback={positiveFeedback}
-          />
-          <Statistics positiveFeedback={positiveFeedback} />
-        </>
+        <Feedback
+          feedback={feedback}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
+        />
       ) : (
         <Notification message="No feedback yet" />
       )}
